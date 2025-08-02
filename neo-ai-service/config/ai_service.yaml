@@ -1,0 +1,156 @@
+service:
+  name: "ai-service"
+  version: "1.0.0"
+  log_level: "INFO"
+
+ipc:
+  host: "localhost"
+  port: 9999
+
+# API provider configurations
+providers:
+  openai:
+    api_key: "${OPENAI_API_KEY}"  # Set via environment variable
+    api_base: "https://api.openai.com/v1"
+    timeout: 60
+    max_retries: 3
+    
+  ollama:
+    api_base: "http://localhost:11434"
+    timeout: 60
+    
+  openrouter:
+    api_key: "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"
+    api_base: "https://openrouter.ai/api/v1"
+    timeout: 60
+    extra_headers:
+      HTTP-Referer: "http://localhost:9999"  # Neo Framework
+      X-Title: "Neo AI Service"
+
+# Default settings
+defaults:
+  chat_model: "gpt-3.5-turbo"
+  temperature: 0.7
+  max_tokens: null  # No limit by default
+
+# Model-specific settings
+models:
+  gpt-4:
+    max_tokens: 4096
+    supports_vision: true
+    supports_functions: true
+    
+  gpt-3.5-turbo:
+    max_tokens: 4096
+    supports_functions: true
+    
+  dall-e-3:
+    sizes: ["1024x1024", "1024x1792", "1792x1024"]
+    quality_options: ["standard", "hd"]
+
+# Cache configuration
+cache:
+  enabled: true
+  memory_backend: true
+  file_backend: false
+  cache_dir: "./cache"
+  max_memory_size: 104857600  # 100MB
+  max_file_size: 1073741824   # 1GB
+  default_ttl: 3600           # 1 hour
+  cleanup_interval: 600       # 10 minutes
+  compression_enabled: true
+
+# Rate limiter configuration
+rate_limiter:
+  enabled: true
+  
+  # Global limits
+  global_rate: 1000      # requests per minute
+  global_burst: 100      # burst capacity
+  
+  # Per-client limits
+  client_rate: 100       # requests per minute per client
+  client_burst: 20       # burst capacity per client
+  
+  # Model-specific limits
+  model_limits:
+    "openai/gpt-4":
+      rate: 10
+      burst: 2
+    "openai/gpt-3.5-turbo":
+      rate: 60
+      burst: 10
+  
+  # Priority levels
+  priority_multipliers:
+    low: 0.5
+    normal: 1.0
+    high: 2.0
+    premium: 5.0
+
+# Model router configuration
+router:
+  enabled: true
+  enable_fallback: true
+  max_fallback_attempts: 3
+  
+  # Routing preferences
+  prefer_local: true
+  cost_sensitive: true
+  quality_priority: false
+  speed_priority: false
+  
+  # Load balancing
+  enable_load_balancing: true
+  load_balance_strategy: "round_robin"
+  
+  # Model health tracking
+  track_model_health: true
+  failure_threshold: 3
+  recovery_time: 300
+
+# Error handler configuration
+error_handler:
+  enable_retry: true
+  max_retries: 3
+  retry_delay: 1.0
+  retry_backoff: 2.0
+  
+  enable_fallback: true
+  log_errors: true
+  
+  # Circuit breaker settings
+  enable_circuit_breaker: true
+  failure_threshold: 5
+  recovery_timeout: 60
+  
+  # Error response formatting
+  include_details: false
+  include_traceback: false
+
+# Performance monitoring configuration
+monitoring:
+  enabled: true
+  
+  # Collection intervals
+  system_metrics_interval: 10
+  service_metrics_interval: 5
+  cleanup_interval: 300
+  
+  # Metric settings
+  enable_system_metrics: true
+  enable_service_metrics: true
+  enable_model_metrics: true
+  enable_cache_metrics: true
+  enable_rate_limit_metrics: true
+  
+  # Export settings
+  export_format: "json"
+  export_path: "./metrics/ai_service_metrics.json"
+  export_interval: 60
+  
+  # Alerting thresholds
+  cpu_threshold: 80.0
+  memory_threshold: 80.0
+  error_rate_threshold: 5.0
+  latency_threshold: 2.0

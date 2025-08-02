@@ -1,0 +1,64 @@
+Neo AI Service - Final Project Structure
+========================================
+
+neoAI/
+├── .gitignore
+├── LICENSE
+├── README.md                    # Simple, clean main README
+├── neo-framework.exe           # Neo Framework executable
+├── start-ai-service.bat        # Quick start script
+├── start-neo.bat              # Neo Framework start script
+├── stop-ai-service.bat        # Stop services script
+│
+├── configs/                    # Neo Framework configurations
+│   ├── README.md
+│   ├── default.yml
+│   ├── development.yml
+│   ├── production.yml
+│   └── test.yml
+│
+├── docs/                       # All documentation (organized)
+│   ├── README.md              # Documentation index
+│   ├── CHANGELOG.md           # Version history
+│   ├── STRUCTURE.md           # Project structure
+│   ├── api/                   # API documentation
+│   │   ├── IPC_INTEGRATION_GUIDE.md
+│   │   └── IPC_PROTOCOL.md
+│   ├── design/                # Design documentation
+│   │   └── AI_SERVICE_DESIGN.md
+│   └── guides/                # User guides
+│       └── USER_GUIDE.md
+│
+├── ipc-examples/              # IPC implementation examples
+│   └── python/
+│       ├── README.md
+│       └── service.py
+│
+└── neo-ai-service/            # AI Service implementation
+    ├── README.md
+    ├── requirements.txt
+    ├── config/
+    │   └── ai_service.yaml    # AI service configuration
+    ├── examples/
+    │   └── README.md
+    ├── src/                   # Source code
+    │   ├── __init__.py
+    │   ├── main.py           # Main entry point
+    │   ├── adapters/         # AI provider adapters
+    │   │   ├── __init__.py
+    │   │   ├── base.py
+    │   │   ├── ollama_adapter.py
+    │   │   ├── openai_adapter.py
+    │   │   └── openrouter_adapter.py
+    │   ├── handlers/         # Request handlers
+    │   │   ├── __init__.py
+    │   │   └── chat.py
+    │   ├── ipc/             # IPC client implementation
+    │   │   ├── __init__.py
+    │   │   ├── client.py
+    │   │   └── protocol.py
+    │   └── utils/           # Utilities
+    │       ├── __init__.py
+    │       ├── config.py
+    │       └── logger.py
+    └── tests/               # Test directory (future)
